@@ -79,8 +79,9 @@ DATABASES = {
         'NAME': 'restaurantratingsystem',
         'USER': 'root',
         'PASSWORD': 'vdsforeverr',
-        'HOST': 'db',
-        'PORT': 3308,
+        'ROOT_PASSWORD': 'vdsforeverr',
+        'HOST': 'localhost',
+        'PORT': '3315',
     }
 }
 
