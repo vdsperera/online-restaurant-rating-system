@@ -25,7 +25,7 @@ SECRET_KEY = 'kl1_89rom85%#acsi__$v$2e5hf)f4sa**_gu#$94su^jxjk43'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhosr']
 
 
 # Application definition
@@ -80,8 +80,8 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'vdsforeverr',
         'ROOT_PASSWORD': 'vdsforeverr',
-        'HOST': 'localhost',
-        'PORT': '3315',
+        'HOST': 'msqldb',
+        'PORT': '3306',
     }
 }
 
