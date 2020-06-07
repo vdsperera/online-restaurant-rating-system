@@ -3,6 +3,7 @@ version: "3"
 services:
     msqldb:
         image: mysql:8.0.20
+        command: --default-authentication-plugin=mysql_native_password
         environment:
           MYSQL_ROOT_PASSWORD: vdsforeverr
           MYSQL_PASSWORD: vdsforeverr
