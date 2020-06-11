@@ -1,2 +1,6 @@
 
 django/restaurantratingsystem/__pycache__/
+
+django/restaurantratingapi/__pycache__/
+
+django/restaurantratingapi/migrations/__pycache__/
