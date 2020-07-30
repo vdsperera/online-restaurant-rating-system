@@ -74,7 +74,7 @@ class RestaurantService:
         ### Need to add contribution points to the user ###
 
         # this should be change by using response model
-        respose={
+        response={
             "success": True,
             "code": 200,
             "message": "success RegisterRestaurant",
