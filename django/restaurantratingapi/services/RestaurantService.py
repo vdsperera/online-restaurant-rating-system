@@ -42,6 +42,40 @@ class RestaurantService:
         if(not ValidationService.isset(value=rest_latitude)):
             raise APIException("Latitude is empty")    
 
+        # validate request data values
+        if(not isinstance(username, str)):
+            raise APIException("Username should be string")
+
+        if(not isinstance(rest_name, str)):
+            raise APIException("Restaurant name should be string")            
+
+        if(not isinstance(rest_address, str)):
+            raise APIException("Restaurant address should be string")
+
+        if(not isinstance(selected_role, str)):
+            raise APIException("Role should be string")     
+
+        try:
+            float(rest_longitude)
+            rest_longitude = float(data['longitude'])   
+        except:
+            raise APIException("Longitude should be numeric")
+
+        try:
+            float(rest_latitude)
+            rest_latitude = float(data['latitude'])   
+        except:
+            raise APIException("Latitude should be numeric")
+
+        if(not ValidationService.is_geo_coordinate(rest_longitude,'lo')):
+            raise APIException("Longitude is invalid")
+
+        if(not ValidationService.is_geo_coordinate(rest_latitude,'la')):
+            raise APIException("Latitude is invalid")
+
+        if(not ValidationService.is_phone_number(rest_pnumber)):
+            raise APIException("Phone number is invalid")
+
         # check whether the user is owner - raw sql should be replaced
         users = User.objects.raw('SELECT * FROM auth_user INNER JOIN auth_user_groups ON auth_user.id=auth_user_groups.user_id WHERE auth_user_groups.group_id=1 AND auth_user.username=%s', [username])
         
