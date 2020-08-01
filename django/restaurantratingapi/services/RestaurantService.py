@@ -11,14 +11,18 @@ class RestaurantService:
         self.data = []
 
     def register_restaurant(self, data):
+
         # retrieve request data
-        username = data['user']
-        rest_name = data['name'] #restaurant name #required
-        rest_address = data['address'] #restaurant address
-        rest_pnumber = data['phone_number'] #restaurant phone number
-        rest_longitude = data['longitude'] #restaurant GEO location-longitude #required
-        rest_latitude = data['latitude'] #restaurant GEO location-latitude #required
-        selected_role = data['role'] #user's requested role for the restaurant
+        try:
+            username = data['user']
+            rest_name = data['name'] #restaurant name #required
+            rest_address = data['address'] #restaurant address
+            rest_pnumber = data['phone_number'] #restaurant phone number
+            rest_longitude = data['longitude'] #restaurant GEO location-longitude #required
+            rest_latitude = data['latitude'] #restaurant GEO location-latitude #required
+            selected_role = data['role'] #user's requested role for the restaurant
+        except KeyError as e:
+            raise APIException(f"Key {e} not exists in the request")
 
         # set default values
         rest_code = SystemService.generate_restaurant_code()
@@ -67,7 +71,7 @@ class RestaurantService:
             code=rest_code,
             created_by=user)      
          
-        rest.save()
+        # rest.save()
         
         print(rest_owner.id if rest_owner != None else None)
 
