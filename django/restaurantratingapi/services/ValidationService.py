@@ -1,3 +1,5 @@
+import re
+
 class ValidationService:
 
     def __init__(self):
@@ -20,3 +22,10 @@ class ValidationService:
             return True if (value <= 90 and value >= -90) else False
         if type == 'la':
             return True if (value <= 180 and value >= -180) else False
+
+    @staticmethod
+    def is_phone_number(value):
+        if(re.match(r"^\+?1?\d{9,15}$", value)):
+            return True
+        else:
+            False
