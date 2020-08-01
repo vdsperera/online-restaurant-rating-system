@@ -113,7 +113,7 @@ class RestaurantService:
             code=rest_code,
             created_by=user)      
          
-        # rest.save()
+        rest.save()
         
         print(rest_owner.id if rest_owner != None else None)
 
