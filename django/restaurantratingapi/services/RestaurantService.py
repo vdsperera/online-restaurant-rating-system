@@ -76,6 +76,10 @@ class RestaurantService:
         if(not ValidationService.is_phone_number(rest_pnumber)):
             raise APIException("Phone number is invalid")
 
+        #check whether the restaurant name already exists
+        if(Restaurant.objects.filter(name=rest_name).exists()):
+            raise APIException(f"Restaurant name '{rest_name}' already exists")
+
         # check whether the user is owner - raw sql should be replaced
         users = User.objects.raw('SELECT * FROM auth_user INNER JOIN auth_user_groups ON auth_user.id=auth_user_groups.user_id WHERE auth_user_groups.group_id=1 AND auth_user.username=%s', [username])
         
