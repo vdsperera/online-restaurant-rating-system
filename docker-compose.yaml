@@ -20,4 +20,10 @@ services:
         ports:
             - "80:80"
         depends_on:
-          - msqldb       
+          - msqldb    
+
+    ng:
+        container_name: ng
+        build: angular
+        ports:
+          - "8080:80"   
