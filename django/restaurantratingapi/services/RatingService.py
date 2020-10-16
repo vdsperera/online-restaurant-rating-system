@@ -15,8 +15,8 @@ from .ValidationService import ValidationService
 
 class RatingService:
 
-	def __init__(self):
-		self.data = [];
+    def __init__(self):
+        self.data = [];
 
     def add_rating(self, data):
         # retrieve request data
@@ -157,5 +157,5 @@ class RatingService:
 
         return resp 
 
-	def delete_rating(self, data):
-		pass;
+    def delete_rating(self, data):
+        pass;
