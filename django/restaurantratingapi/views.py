@@ -8,7 +8,9 @@ class UserRoleViewSet(viewsets.ModelViewSet):
 	serializer_class = UserRoleSerializer
 
 class RestaurantViewSet(viewsets.ViewSet):
-	
+
+    queryset = Restaurant.objects.all().order_by('restaurant_id')
+    serializer_class = RestaurantSerializer		
 	def create(self, request):
 		data = request.data['data']['mdata']
 		restservice = RestaurantService()
