@@ -4,3 +4,7 @@ django/restaurantratingsystem/__pycache__/
 django/restaurantratingapi/__pycache__/
 
 django/restaurantratingapi/migrations/__pycache__/
+
+django/restaurantratingapi/enums/__pycache__/
+
+django/restaurantratingapi/services/__pycache__/
