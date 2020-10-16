@@ -8,6 +8,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { RegisterRestaurantComponent } from './register-restaurant/register-restaurant.component';
 import { RestaurantDetailsComponent } from './restaurant-details/restaurant-details.component';
 import { StarRatingComponent } from './star-rating/star-rating.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { StarRatingComponent } from './star-rating/star-rating.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatSidenavModule,    
   ],
   providers: [],
   bootstrap: [AppComponent]
