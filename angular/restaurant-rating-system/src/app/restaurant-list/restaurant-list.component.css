@@ -1,0 +1,119 @@
+.example-card {
+  max-width: 400px;
+}
+
+.example-header-image {
+  background-image: url('https://cdn.pixabay.com/photo/2019/09/23/16/39/square-4499056_960_720.jpg');
+  background-size: cover;
+}
+
+.example-header-image1 {
+  background-image: url('https://cdn.pixabay.com/photo/2020/08/05/19/07/pedestrian-bridge-5466182_960_720.jpg');
+  background-size: cover;
+}
+
+.example-header-image2 {
+  background-image: url('https://cdn.pixabay.com/photo/2020/07/23/07/10/market-5430564_960_720.jpg');
+  background-size: cover;
+}
+
+.example-header-image3 {
+  background-image: url('https://cdn.pixabay.com/photo/2020/07/03/16/42/amsterdam-5367020_960_720.jpg');
+  background-size: cover;
+}
+
+
+.checked {
+  color: orange;
+}
+
+.img {
+  height: 200px;
+  width: 300px;
+}
+
+html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.div_main {
+/*  padding-right: 30px;
+  padding-left: 80px;*/
+  margin-left: 100px;
+}
+
+
+/* Add application styles & imports to this file! */
+
+   .bounds {
+      background-color:#ddd;
+      height :800px;
+    }
+    
+    .sec1 {
+      background: red;
+      color:white;
+      text-transform: uppercase
+    }
+    
+    .sec2 {
+      background: yellow;
+      color:blue;
+      
+    }
+    
+    .sec3 {
+      background: blue;
+      color:white;
+      text-transform: uppercase
+    }
+    
+    .sec1, .sec2, .sec3 {
+      padding-top:20px;
+      text-align:center
+    }
+    
+    .content {
+      min-width: 300px;
+      /*height: 400px;*/
+    }
+
+
+.child-1
+{
+    background-color: orange;
+}
+
+.child-2{       
+    background-color: yellow;
+}
+
+.child-3{
+    background-color: green;
+}
+    
+.container{
+     margin: 15px;
+     height:200px;
+     width:500px;
+     border:2px solid red;
+}
+
+.div.sbt{
+ display: inline-block;
+}
+
+div button{
+    display:inline-block;
+    white-space:normal;    
+}
+
+
+.navBardemoBasicUsage md-content .ext-content {
+  padding: 50px;
+  margin: 20px;
+  background-color: #FFF2E0; }
+
