@@ -4,6 +4,7 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
+router.register(r'roles', views.UserRoleViewSet)
 router.register(r'restaurants', views.RestaurantViewSet, basename='RestaurantView')
 
 urlpatterns = [
