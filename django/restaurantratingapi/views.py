@@ -14,3 +14,13 @@ class RestaurantViewSet(viewsets.ViewSet):
 		restservice = RestaurantService()
 		response = restservice.register_restaurant(data)
 		return Response(response)
+
+class RatingViewSet(viewsets.ViewSet):
+
+    serializer_class = RestaurantSerializer
+
+    def create(self, request):
+        data = request.data['data']['mdata']
+        rating_service = RatingService()
+        qry = rating_service.add_rating(data)
+        return Response(qry)
