@@ -1,7 +1,11 @@
+from .models import UserRole
 from .models import Restaurant
+from .models import Rating
 from rest_framework import serializers
+from django.contrib.auth.models import User
+from .serializers import *
 
-class RestaurantSerializer(serializers.HyperlinkedModelSerializer):
+class UserRoleSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
-		model = Restaurant
-		fields = ('restaurant_id', 'name', 'address', 'longitude','latitude', 'phone_number', 'claimed', 'claimed_by', 'code', 'created_by')
+		model = UserRole
+		fields = ['role_id', 'role_name']
