@@ -24,11 +24,16 @@ class RestaurantViewSet(viewsets.ViewSet):
 
     queryset = Restaurant.objects.all().order_by('restaurant_id')
     serializer_class = RestaurantSerializer		
-	def create(self, request):
-		data = request.data['data']['mdata']
-		restservice = RestaurantService()
-		response = restservice.register_restaurant(data)
-		return Response(response)
+    def create(self, request):
+        data = request.data['data']['mdata']
+        restservice = RestaurantService()
+        response = restservice.register_restaurant(data)
+        return Response(response)
+
+    def list(self, request):
+        queryset = Restaurant.objects.all()
+        serializer = RestaurantSerializer(queryset, many=True, context={'request':request})
+        return Response(serializer.data)
 
 class RatingViewSet(viewsets.ViewSet):
 
