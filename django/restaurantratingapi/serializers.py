@@ -19,3 +19,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = User
 		fields = ['id', 'username']
+
+class RatingSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Rating
+		fields = ['rating_id', 'dish_rating', 'price_rating', 'service_rating', 'verified', 'created_on', 'updated_on']
