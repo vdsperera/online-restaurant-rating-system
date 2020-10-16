@@ -1,6 +1,6 @@
 ### Stage 01: build ###
 
-FROM mhart/alpine-node:12 as builder
+FROM node:12-alpine as builder
 
 # Set working directory
 RUN mkdir  /app
