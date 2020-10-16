@@ -22,7 +22,7 @@ RUN npm run build --prefix restaurant-rating-system -- --output-path=./dist/out
 
 ### Stage 02: delivery ###
 
-FROM yobasystems/alpine-nginx:stable
+FROM nginx:alpine
 
 # Remove default nginx website
 RUN rm -rf /usr/share/nginx/html/*
