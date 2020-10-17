@@ -8,7 +8,7 @@ import { Restaurant } from './restaurant';
 })
 export class ApiService {
 
-  API_URL = 'http://127.0.0.1:8000';
+  API_URL = 'http://127.0.0.1:80';
 
   constructor(private http: HttpClient) { }
 
