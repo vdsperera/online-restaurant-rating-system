@@ -39,9 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'restaurantratingapi',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -129,3 +131,5 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'restaurantratingapi.utils.custom_exception_hander'
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
