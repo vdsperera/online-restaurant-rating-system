@@ -1,1 +1,60 @@
-<p>register-restaurant works!</p>
+<body>
+<div class="clsmain">	
+	<h1> Register Restaurant </h1>
+	<form [formGroup]="rest_register_form" class="create-account-form" (ngSubmit)="onSubmit(f)" #f="ngForm">
+		<mat-form-field appearance="fill">
+		  <mat-label>What is your role</mat-label>
+		  <mat-select formControlName='user_role' name="user_role" [(value)]="selected" ngModel >
+		    <mat-option value="Customer">Customer</mat-option>		  	
+		    <mat-option value="Restaurant Owner">Restaurant Owner</mat-option>
+		  </mat-select>
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label class="clslbl">Business name</mat-label>
+    		<input formControlName='rest_name' name="rest_name" matInput ngModel />			
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>Phone number</mat-label>
+    		<input formControlName='rest_pnumber' name="rest_pnumber" matInput type="text" ngModel/>			
+		</mat-form-field>	
+		<br>	
+		<mat-form-field appearance='fill'>
+    		<mat-label>Website</mat-label>
+    		<input formControlName='rest_website' name="rest_website" matInput type="text" ngModel/>			
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>Email</mat-label>
+    		<input formControlName='rest_email' name="email" matInput type="text" ngModel/>			
+		</mat-form-field>
+		<br>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>City</mat-label>
+    		<input formControlName='rest_city' name="city" matInput type="text" type="text" ngModel/>			
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>Zip Code</mat-label>
+    		<input formControlName='rest_zip_code'  name="rest_zip_code" matInput type="text" ngModel />			
+		</mat-form-field>		
+		<br>
+<!-- 		<div class="row">
+			<div id="hotel_map" class="hotel_map"></div>
+		</div>	 -->
+		<br>
+		<label for="file">Choose File</label>	
+		<input type="file" name="file" (change)="handleFileInput($event.target.files)"/>			
+		<br>
+			<button mat-raised-button type="submit" color="primary">Submit</button>	
+
+	</form>
+	<div id="myposition"></div>
+
+</div>
+
+
+
+</body>
