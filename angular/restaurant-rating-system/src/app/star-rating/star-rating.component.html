@@ -1,1 +1,27 @@
-<p>star-rating works!</p>
+<label class=rating_label>Dish Rating</label><button mat-icon-button [color]="color" *ngFor="let ratingId of rating_array;index as i" [id]="'star_'+i" (click)="onClick(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+  <mat-icon>
+    {{show_icon(i)}}
+  </mat-icon>
+</button>
+<mat-error *ngIf="star_count == null || star_count == 0">
+  Star count is <strong>required</strong> and cannot be zero
+</mat-error>
+<br>
+<label class=rating_label>Price Rating</label><button mat-icon-button [color]="color" *ngFor="let ratingId of price_rating_array;index as i" [id]="'star_'+i" (click)="on_price_click(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+  <mat-icon>
+    {{show_price_icon(i)}}
+  </mat-icon>
+</button>
+<mat-error *ngIf="price_star_count == null || price_star_count == 0">
+  Price Star count is <strong>required</strong> and cannot be zero
+</mat-error>
+<br>
+<label class=rating_label>Service Rating</label><button mat-icon-button [color]="color" *ngFor="let ratingId of service_rating_array;index as i" [id]="'star_'+i" (click)="on_service_click(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
+  <mat-icon>
+    {{show_service_icon(i)}}
+  </mat-icon>
+</button>
+<mat-error *ngIf="service_star_count == null || service_star_count == 0">
+  Service Star count is <strong>required</strong> and cannot be zero
+</mat-error>
+
