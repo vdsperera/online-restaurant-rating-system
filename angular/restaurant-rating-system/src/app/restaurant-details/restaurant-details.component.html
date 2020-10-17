@@ -1,1 +1,19 @@
-<p>restaurant-details works!</p>
+<div class='rating'>
+<!-- 	<mat-form-field> -->
+<!-- 	<mat-select class='mat-select-dish' name="user_role" ngModel placeholder='Dish'>
+		<mat-option class='mat-option-dish' value="Kottu">Kottu</mat-option>		  	
+		<mat-option class='mat-option-dish' value="Fried Rice">Fried Rice</mat-option>
+		<mat-option class='mat-option-dish' value="Chopsey Rice">Chopsey Rice</mat-option>
+	</mat-select>
+	<br> -->
+<!-- 	<select name="cars" id="cars">
+	  <option value="Kottu">Dish 01</option>
+	  <option value="Fried Rice">Dish 02</option>
+	  <option value="Chopsey Rice">Dish 03</option>
+	</select> -->	
+<!-- 	</mat-form-field> -->
+	<br>
+	<app-star-rating (rating_model_event) = "rating_event_hander($event)"></app-star-rating>
+	<br>
+	<button mat-raised-button color="primary">Submit</button>	
+</div>
