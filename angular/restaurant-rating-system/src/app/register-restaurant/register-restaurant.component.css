@@ -1,0 +1,45 @@
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.mat-form-field-empty.mat-form-field-label {
+    color: green;
+}
+
+/* Border */
+/*.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: green;
+}*/
+
+/*input.mat-input-element {
+  color: green;
+}*/
+
+mat-label {
+  color: gray;	
+}
+
+mat-form-field {
+/*  background-color: #f0f0f0;*/
+}
+
+/*#hotel_map {
+    height: 100px;
+    width: 100px;
+}
+*/
+.hotel_map {
+    height: 500px;
+    width: 500px;
+}
+
+body {
+  margin-left: 1%;
+  margin-right: 1%;
+}
