@@ -1,3 +1,7 @@
+
+How to setup the project on Linux
+
+---
 Install Docker
 
 https://docs.docker.com/engine/install/ubuntu/
@@ -66,7 +70,7 @@ $ sudo apt-get install docker-compose
 ---
 Run the project
 
-*go to root directory that docker-compose file is located
+- go to root directory that docker-compose file is located
 ```
 $ sudo docker-compose up
 ```
