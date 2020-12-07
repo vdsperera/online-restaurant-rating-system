@@ -189,5 +189,41 @@ class RatingService:
     def verify_rating(self, data):
         pass
 
+    ## should check with activity diagram
+    # GET api/ratings/list
+    # this gets list of ratings for all restaurants and group them by rest_id
+    # this also gives average rating for each resturant
+    def get_rating_list_for_all_restaurants(self, data):
+
+        added_ratings  = Rating.objects.raw("""
+            SELECT rating_id, restaurant_id, dish_rating, price_rating,
+            service_rating,
+            AVG(dish_rating) as avg_dish,
+            AVG(price_rating) as avg_price,
+            AVG(service_rating) as avg_service,
+            (AVG(dish_rating)+AVG(price_rating)+AVG(service_rating))/3 as avg_total,
+            COUNT(restaurant_id) as count
+            FROM rating
+            GROUP BY restaurant_id
+            """)        
+
+        list = []
+        for item in added_ratings:
+            # print(item)
+            # print(1)
+            added_rating_model = {
+                "restaurant_id": item.restaurant_id,
+                # "restaurant_id_dish": item.resd,
+                # "restaurant name": "Test",
+                "total_no_of_ratings": item.count,
+                "overall_rating": item.avg_total,
+                "dish_rating": item.avg_price,
+                "price_rating": item.avg_price,
+                "service_rating": item.avg_dish
+            }
+            list.append(added_rating_model)
+
+        return list
+
     def delete_rating(self, data):
         pass;
