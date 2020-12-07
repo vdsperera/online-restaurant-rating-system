@@ -381,3 +381,54 @@ class RatingService:
         return list
 
         return 'get ratings list for all restaurants(group by rest)(with average ratings)'
+
+    ## should check with activity diagram
+    # GET api/ratings/dishes/list?dishid=2
+    # this gets list of dish ratings for all restaurants for a specific dish and group them by restid
+    # this also gives average ratings
+    def get_dish_rating_list_for_all_restaurant_for_the_dish(self, dish_id):
+
+        added_dish_ratings = AddedDishRating.objects.raw("""
+            SELECT added_dish_rating.rating_id, restaurant_id,
+            dish_rating, price_rating,service_rating,
+            COUNT(added_dish_rating.rating_id) as count,
+            AVG(dish_rating) as avg_dish,
+            AVG(price_rating) as avg_price,
+            AVG(service_rating) as avg_service,
+            (AVG(dish_rating)+AVG(price_rating)+AVG(service_rating))/3 as avg_total
+            FROM added_dish_rating
+            INNER JOIN rating
+            ON added_dish_rating.rating_id=rating.rating_id
+            WHERE dish_id=%s
+            GROUP BY restaurant_id
+            ORDER BY avg_dish DESC
+            """, [dish_id])
+
+        ratings = []
+
+        for rating in added_dish_ratings:
+            res = {
+                "restaurant_id": rating.restaurant_id,
+                "total_no_of_ratings": rating.count,
+                "overall_rating": rating.avg_total,
+                "dish_rating": rating.avg_dish,
+                "price_rating": rating.avg_price,
+                "service_rating": rating.avg_service
+            }
+            ratings.append(res)
+
+        resp = {
+            "success": True,
+            "code": 200,
+            "message": "success GetDishRatings",
+            "data": {
+                "dish_id": dish_id,
+                "ratings": ratings
+            }
+        }
+
+        return resp
+
+
+
+
