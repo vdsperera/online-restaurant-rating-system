@@ -14,11 +14,11 @@ import random
 class SystemService:
 
     def __init__(self):
-    	self.data = []
-    	
+        self.data = []
+        
     @staticmethod
     def generate_restaurant_code():
-    	return get_random_string(length=20)
+        return get_random_string(length=20)
 
     @staticmethod
     def id_generator(size=10, chars=string.ascii_uppercase + string.digits):

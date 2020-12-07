@@ -186,7 +186,7 @@ class RestaurantService:
             }
         }
 
-        return resp   	
+        return resp     
         
     def deregister_restaurant():
         pass    
