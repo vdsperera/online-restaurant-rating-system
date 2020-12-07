@@ -476,6 +476,16 @@ class RatingService:
         return resp
         return 'get dish rating list for a restaurant'
 
+    # def get_restaurant_rating_list(self, data):
+    #     pass
+
+    #  # customer can see ratings for each dish of that restaurant
+    # def get_restaurant_dish_ratings(self, data):
+    #     pass
+    
+    # # customer can see list of ratings for for all restaurants
+    # def get_all_restaurant_ratings():
+    #     pass
 
 
 
