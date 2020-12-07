@@ -25,7 +25,7 @@ class SystemService:
         return ''.join(random.choice(chars) for _ in range(size))
 
     def generate_tokens_for_restaurant(self, data):
-    	
+
         restaurant_id = data['restaurant_id']
         username = data['user']
         generate_size = data['generate_size']
@@ -77,4 +77,35 @@ class SystemService:
         }
         }
 
+        return resp   
+
+    def get_tokens_for_restaurant(self, data):
+        
+        restaurant_id = data['restid'][0]
+        try: 
+            restaurant = Restaurant.objects.get(restaurant_id=restaurant_id)
+        except IntegrityError as e:
+            raise APIException("Restaurant is not available in the system")
+
+        tokens = Token.objects.filter(restaurant=restaurant)
+        print(tokens.exists())
+        if(not tokens.exists()):
+            raise APIException("Currently no token for this restaurant")
+
+        token_list = []
+        for item in tokens:
+            token_model = {
+            "token_number":item.token_number
+            }
+            token_list.append(token_model)
+
+        resp = {
+            "success": True,
+            "code": 200,
+            "message": "success GetTokensForRestaurant",
+            "data": {
+              "restaurant_id": restaurant_id,
+              "tokens": token_list
+            }
+        }
         return resp   
