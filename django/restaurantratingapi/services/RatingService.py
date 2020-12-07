@@ -487,5 +487,47 @@ class RatingService:
     # def get_all_restaurant_ratings():
     #     pass
 
+    # duplicate of get_dish_rating_list_for_all_restaurant_for_the_dish
+    # customer can see list of  dish ratings  for all restaurants for specific dish
+    # get_all_restaurant_dish_ratings(dish_id)
+    def get_ratings_for_dish(self, dish_id):
+        
+        added_dish_ratings = AddedDishRating.objects.raw("""
+            SELECT added_dish_rating.rating_id, restaurant_id
+            dish_rating, price_rating,service_rating,
+            AVG(dish_rating) as avg_dish,
+            AVG(price_rating) as avg_price,
+            AVG(service_rating) as avg_service,
+            (AVG(dish_rating)+AVG(price_rating)+AVG(service_rating))/3 as avg_total
+            FROM added_dish_rating INNER JOIN rating
+            ON added_dish_rating.rating_id=rating.rating_id
+            WHERE dish_id=%s
+            GROUP BY restaurant_id
+            ORDER BY avg_dish DESC
+            """, [dish_id])
+
+        ratings = []
+
+        for rating in added_dish_ratings:
+            res = {
+                "restaurant_id": rating.restaurant_id,
+                "average_dish_rating": rating.avg_dish,
+                "average_price_rating": rating.avg_price,
+                "average_price_rating": rating.avg_service,
+                "average_total_rating": rating.avg_total
+            }
+            ratings.append(res)
+
+        resp = {
+            "success": True,
+            "code": 200,
+            "message": "success GetDishRatings",
+            "data": {
+                "dish_id": dish_id,
+                "ratings": ratings
+            }
+        }
+
+        return resp
 
 
