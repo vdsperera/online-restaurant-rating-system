@@ -109,3 +109,6 @@ class SystemService:
             }
         }
         return resp   
+
+    def check_token_is_already_used(self, data):
+        pass
