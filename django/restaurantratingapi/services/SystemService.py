@@ -112,3 +112,18 @@ class SystemService:
 
     def check_token_is_already_used(self, data):
         pass
+
+    def add_contribution_points(self, contribution_type_value, user):
+        print('contribution_type_value')
+        print(contribution_type_value)
+        contribution_type = ContributionType.objects.get(contribution_type_id=contribution_type_value)
+        print(contribution_type)
+        contribution = Contribution(
+            contribution_type = contribution_type,
+            user = user
+            )
+        try: 
+            contribution.save()
+        except IntegrityError as e:
+            raise APIException(e)    
+        pass
