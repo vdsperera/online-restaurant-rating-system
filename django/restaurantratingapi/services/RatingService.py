@@ -185,5 +185,9 @@ class RatingService:
 
         return resp
 
+    # POST api/ratings/verify/{rating_id]
+    def verify_rating(self, data):
+        pass
+
     def delete_rating(self, data):
         pass;
