@@ -318,3 +318,66 @@ class RatingService:
 
     def delete_rating(self, data):
         pass;
+
+    ## should check with activity diagram
+    # created for restaurant service(not pre planned function)
+    # now this seems to be unnecesary and this can be achieved by above function - get_ratings_for_restaurant
+    def get_detail_ratings_for_restaurant(self, rest_id):
+
+        added_ratings  = Rating.objects.raw("""
+            SELECT rating_id, restaurant_id, dish_rating, price_rating,
+            service_rating
+            WHERE restaurant_id = %s
+            FROM rating
+            """, [rest_id])        
+
+        list = []
+
+        dish_rating = 0
+        price_rating = 0
+        service_rating = 0
+        total_no_of_ratings = 0
+        overall_rating = 0
+
+        for item in added_ratings:
+            # print(item)
+            # print(1)
+            total_no_of_ratings = total_no_of_ratings + 1
+            dish_rating = dish_rating + item.dish_rating
+            price_rating = price_rating + item.price_rating
+            service_rating = service_rating + item.service_rating
+
+            added_rating_model = {
+                "restaurant_id": item.restaurant_id,
+                # "restaurant_id_dish": item.resd,
+                # "restaurant name": "Test",
+                "total_no_of_ratings": item.count,
+                "overall_rating": item.avg_total,
+                "dish_rating": item.avg_price,
+                "price_rating": item.avg_price,
+                "service_rating": item.avg_dish
+            }
+            list.append(added_rating_model)
+
+        avg_dish_rating = dish_rating/total_no_of_ratings
+        avg_price_rating = price_rating/total_no_of_ratings
+        avg_service_rating = service_rating/total_no_of_ratings
+        avg_overall_rating = (avg_dish_rating + avg_price_rating + avg_service_rating)/3
+
+        resp = {
+            "success": True,
+            "code": 200,
+            "message": "success GetDetailedRatingsForRestaurant",
+            "data": {
+                "restaurant_id": rest_id,
+                "total_no_of_ratings": total_no_of_ratings,
+                "overall_rating": avg_overall_rating,
+                "dish_rating": avg_dish_rating,
+                "price_rating": avg_price_rating,
+                "service_rating": avg_service_rating
+            }
+        }
+
+        return list
+
+        return 'get ratings list for all restaurants(group by rest)(with average ratings)'
