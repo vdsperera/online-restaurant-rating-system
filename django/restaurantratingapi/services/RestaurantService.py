@@ -469,7 +469,111 @@ class RestaurantService:
         }
         return resp
 
-    def request_edit():
+    def request_edit(self, data):
+
+        username = 'dilshan'
+        restaurant_id = data['restaurant_id']
+        component = data['component']
+        current_value = data['current_value']
+        new_value = data['new_value']
+        is_owner = False
+
+
+        edit_component = EditComponent.objects.filter(component_id = component)
+
+        if(not edit_component.exists()):
+            return False
+
+        user = User.objects.filter(username=username)
+        custom_user = CustomUser.objects.filter(user_id=user[0].id)
+        print(custom_user[0].level_number.allocated_comfirmation_points)
+
+        user_role = custom_user[0].role_id.role_id
+        if(user_role == UserRoles.Admin.value):
+            is_owner = True
+            # return True
+
+        restaurant = Restaurant.objects.filter(restaurant_id=restaurant_id, claimed_by=user[0])
+        # print(restaurant)
+        if(is_owner == True):
+            if(restaurant.exists() == False):
+                return False
+            else:
+                pass
+                # return True
+                self.set_history(user[0], restaurant[0], edit_component[0], current_value, new_value, status=2)
+                self.update_restaurant_component_value(component, restaurant[0], new_value)
+                pass
+                # allow edit
+        else:
+            pass
+            hasRecentChangesByThisUser = False
+            hasRecentChangesByOtherUsers = False
+            if(hasRecentChangesByThisUser):#check user has recent changes for the component
+                return APIException("has recently edited")
+            if(hasRecentChangesByOtherUsers):
+                self.set_history(user[0], restaurant[0], edit_component[0], current_value, new_value, status=2)
+                update_restaurant_component_value(component, restaurant[0], new_value)
+            else:
+                pass
+                if(restaurant[0].claimed_status == 2):#claimed restaurant
+                    self.set_history(user[0], restaurant[0], edit_component[0], current_value, new_value, status=2)
+                else:
+                    pass
+                    self.set_history(user[0], restaurant[0], edit_component[0], current_value, new_value, status=2)
+
+                    update_restaurant_component_value(component, restaurant[0], new_value)
+
+
+
+        return restaurant
+        #check whether the username already exists
+        # if(not User):
+        #     raise APIException(f"Username name '{username}' not exists")
+        print(custom_user)
+        return user
+
+        pass
+
+    def set_history(self, user, restaurant, edit_component, current_value, new_value, status=2):
+
+        edit_history = EditHistory(
+            current_value = current_value,
+            requested_value = new_value,
+            status = status,#approved
+            confirmed_by = user
+            )
+        # edit_history.save()
+
+        user_edit_history_component = UserEditHistoryComponent(
+            user = user,
+            history = edit_history,
+            restaurant = restaurant,
+            component = edit_component)
+        # user_edit_history_component.save()
+
+        user_edit_history_confirmation = UserEditHistoryConfirmation(
+            user = user,
+            history = edit_history,
+            confirmation_points = edit_component.confirmation_point_level)
+
+    def update_restaurant_component_value(self, component, restaurant, new_value):
+        if(component == RestaurantComponents.RestaurantAddress.value):
+            restaurant[0].address = new_value
+        elif(component == RestaurantComponents.RestaurantEmail.value):
+            pass
+            # restaurant[0].email = new_value
+        elif(component == RestaurantComponents.RestaurantLocation):
+            pass
+            # restaurant[0].address = new_value
+        elif(component == RestaurantComponents.RestaurantName):
+            restaurant[0].name = new_value
+        elif(component == RestaurantComponents.RestaurantWebsite):
+            pass
+            # restaurant[0].website = new_value
+        elif(component == RestaurantComponents.RestaurantPhoneNumber):
+            restaurant[0].phone_number = new_value
+            # restaurant[0].save()     
         pass
 
     def approve_edit():
