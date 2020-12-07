@@ -334,7 +334,140 @@ class RestaurantService:
             }
         }
         return resp
-        pass
+
+    def add_dishes_for_the_restaurant(self, data):
+
+        # retrieve request data
+        req_user = data["user"]
+        req_restaurant_id = data["restaurant_id"]
+        req_dish_id = data["dish_id"]
+        req_dish_name = data["dish_name"]
+        new_dish = False
+        system_service = SystemService()
+
+        # validate request data for null or empty values
+        # 
+        # 
+        if(not ValidationService.isset(value=req_dish_id)):
+            if(not ValidationService.isset(value=req_dish_name)):
+                raise APIException("Dish name is empty")
+            new_dish = True
+
+        # validate request data types
+        # 
+        # 
+
+        # set defaults
+        # 
+        # 
+        status = 0
+        owner = False
+
+        # validate request data for existance in db
+        # 
+        # 
+        # new to check already exists dish name
+        # 
+        # 
+        try: 
+            restaurant = Restaurant.objects.get(restaurant_id=req_restaurant_id)
+        except IntegrityError as e:
+            raise APIException("Restaurant is not available in the system")
+
+        try:
+            user = User.objects.get(username=req_user)
+        except ObjectDoesNotExist as e:
+            raise APIException(f"Username name '{req_user}' not exists")
+
+
+        ## check whether user is other restaurant owner, this restaurant owner or customer
+        custom_user = CustomUser.objects.get(user_id=user)
+        if(custom_user.role_id.role_id == 1):
+            owner = True
+            claimed_rest = Restaurant.objects.filter(restaurant_id=restaurant.restaurant_id, claimed_by=user)
+            if(claimed_rest.exists() == False):
+                return 'operation not permited(only allowed for restaurant owner)'
+
+
+        if(new_dish == False):
+            dish = Dish.objects.filter(dish_id=req_dish_id)
+            print(dish[0].status)
+            if(dish.exists() == True):
+                if(dish[0].status == 1):
+                    dish = dish
+                elif(dish[0].status == 0):
+                    raise APIException("Dish is in pending status for the system")
+                elif(dish[0].status == 2):
+                    raise APIException("Dish is in rejected status for the system")
+            else:
+                raise APIException("Dish is not available in the system")
+
+            restaurantdish = None
+            restaurantdish = RestaurantDish.objects.filter(dish=dish[0].dish_id, restaurant=restaurant) 
+
+            print(restaurantdish)
+
+            if(restaurantdish.exists() == True):
+                print(restaurantdish)
+                if(restaurantdish[0].status == 1):
+                    raise APIException("Dish is already in the restaurant")
+                elif(restaurantdish[0].status == 0):
+                    raise APIException("Dish is in pending status for this restaurant")
+                elif(restaurantdish[0].status == 2):
+                    raise APIException("Dish is in rejected status for this restaurant")
+
+
+            ## check whether dish is rejected one or already requested one
+        else:
+            req_dish = Dish.objects.filter(dish_name=req_dish_name)
+            if(req_dish.exists() == True):
+                if(req_dish[0].status == 1):
+                    dish = req_dish
+                    raise APIException("Dish is in already in the system")
+                elif(req_dish[0].status == 0):
+                    raise APIException("Dish is in pending status for the system")
+                elif(req_dish[0].status == 2):
+                    raise APIException("Dish is in rejected status for the system")
+                
+            else:
+                dish = Dish(
+                dish_name = req_dish_name,
+                status = 1 if owner == True else 0,
+                created_by = user,
+                created_on = "2020-11-14"
+                )
+                try: 
+                    dish.save()
+                except IntegrityError as e:
+                    raise APIException(e)
+
+        added_dish = RestaurantDish(
+            dish = dish[0],
+            restaurant = restaurant,
+            added_by = user,
+            status = 1 if owner == True else 0,
+            created_on = "2020-11-14"
+            )
+
+        try: 
+            added_dish.save()
+            system_service.add_contribution_points(ContributionTypes.AddDishToRestaurant.value, user)
+        except IntegrityError as e:
+            raise APIException(e)
+
+        resp = {
+            "success": True,
+            "code": 200,
+            "message": "success AddDIshesForRestaurant",
+            "data": {
+                "restaurant_id": added_dish.dish_id,
+                "dish_id": dish[0].dish_id,
+                "dish_name": dish[0].dish_name,
+                "added_by": added_dish.added_by.username,
+                "added_status": added_dish.status
+            }
+        }
+        return resp
 
     def request_edit():
         pass
