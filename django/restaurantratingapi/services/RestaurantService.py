@@ -288,6 +288,54 @@ class RestaurantService:
         return resp
         pass
 
+    # not pre planned
+    def get_restaurant_list_for_dish(self, dish_id):
+
+        restaurant_list = Restaurant.objects.raw("""
+            SELECT *
+            FROM restaurant
+
+            """)
+
+        list = []
+        for rest in restaurant_list:
+            rating_svc = RatingService
+            rating_resp = rating_svc.get_ratings_for_restaurant_dish(rest.restaurant_id, dish_id)
+            if rating_resp['data']['total_no_of_ratings'] == 0:
+                continue
+
+            restaurant_model = {
+                "restaurant_id": rest.restaurant_id,
+                "restaurant_name": rest.name,
+                "address": rest.address,
+                "logitude": rest.longitude,
+                "latitude": rest.latitude,        
+                "phone_number": rest.phone_number,
+                "added_by": rest.created_by.username,
+                "claimed_by": rest.claimed_by.username if rest.claimed_by != None else None,
+                "code": rest.code,
+                "claimed_status": ClaimStatus(rest.claimed).name,
+                "created_on": rest.created_on,
+                "total_no_of_ratings": rating_resp['data']['total_no_of_ratings'],
+                "dish_rating": rating_resp['data']['dish_rating'],
+                "price_rating": rating_resp['data']['price_rating'],
+                "service_rating": rating_resp['data']['service_rating'],
+                "overall_rating": rating_resp['data']['overall_rating']
+            }
+            list.append(restaurant_model)
+
+        list.sort(key = lambda x: x['overall_rating'], reverse=True)
+        resp = {
+            "success": True,
+            "code": 200,
+            "message": "success GetRestaurantList",
+            "data": {
+                "restaurant_list": list
+            }
+        }
+        return resp
+        pass
+
     def request_edit():
         pass
 
