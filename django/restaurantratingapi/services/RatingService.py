@@ -1,6 +1,7 @@
 from rest_framework.exceptions import APIException
 from ..models import Rating
 from ..models import AddedDishRating
+from ..models import AddedRating
 from ..models import Dish
 from ..models import Restaurant
 from ..models import User
@@ -11,24 +12,30 @@ from django.core.exceptions import ObjectDoesNotExist
 from .ValidationService import ValidationService
 from django.db import IntegrityError
 from ..enums.RatingEnums import VerifiedStatus
+from ..enums.ContributionEnums import ContributionTypes
 from .ValidationService import ValidationService
+from .SystemService import SystemService
+from django.db.models import Count
+from django.db.models import Avg
+from django.db import connection
 
 class RatingService:
 
     def __init__(self):
         self.data = [];
 
+    # POST api/ratings
     def add_rating(self, data):
         # retrieve request data
         try:
             username = data['user']
-            token_number = data['token_number'] #token number 
-            rest_id = data['restaurant_id'] #restaurant id #required
-            dish_id = data['dish_id'] #dish id
-            dish_rating = data['dish_rating'] #dish rating #required
-            price_rating = data['price_rating'] #price rating #required
-            service_rating = data['service_rating'] #service rating #required
-            review = data['review'] #review #required
+            token_number = data['token_number']  # token number
+            rest_id = data['restaurant_id']  # restaurant id #required
+            dish_id = data['dish_id']  # dish id
+            dish_rating = data['dish_rating']  # dish rating #required
+            price_rating = data['price_rating']  # price rating #required
+            service_rating = data['service_rating']  # service rating #required
+            review = data['review']  # review #required
         except KeyError as e:
             raise APIException(f"Key {e} not exists in the request")
 
@@ -40,10 +47,10 @@ class RatingService:
             raise APIException("Price rating is empty")
 
         if(not ValidationService.isset(value=service_rating)):
-            raise APIException("Service rating is empty")    
+            raise APIException("Service rating is empty")
 
         if(not ValidationService.isset(value=review)):
-            raise APIException("Review is empty") 
+            raise APIException("Review is empty")
 
         # validate request data values for db existance
         if(not isinstance(username, str)):
@@ -57,52 +64,53 @@ class RatingService:
         # price rating integer validation
         # price rating range validation
         if(not ValidationService.is_valid_rating(price_rating)):
-            raise APIException("Invalid price rating")        
+            raise APIException("Invalid price rating")
 
         # service rating integer valiation
         # service rating range validation
         if(not ValidationService.is_valid_rating(service_rating)):
-            raise APIException("Invalid service rating")        
+            raise APIException("Invalid service rating")
 
         # check user exists
-        # check whether the username exists
-
         try:
             user = User.objects.get(username=username)
         except ObjectDoesNotExist as e:
             raise APIException(f"Username name '{username}' not exists")
-            
+
         # check user logged in
 
         # validate restaurant id
         # check whether the restaurant id exists
-        
         try:
             restaurant = Restaurant.objects.get(restaurant_id=rest_id)
         except ObjectDoesNotExist as e:
             raise APIException(f"Restaurant id '{rest_id}' not exists")
 
         # validate dish id(if exists)
+        # dish = Dish.objects.get(dish_id=dish_id)
 
-        try:
-            dish = Dish.objects.get(dish_id=dish_id)
-        except ObjectDoesNotExist as e:
-            raise APIException(f"Dish id '{dish_id}' not exists")
+        # if(not dish):
+        #     raise APIException(f"Dish id '{dish_id}' not exists")
+        if(dish_id != None):
+            try:
+                dish = Dish.objects.get(dish_id=dish_id)
+            except ObjectDoesNotExist as e:
+                raise APIException(f"Dish id '{dish_id}' not exists")
 
-        # token = Token.objects.get(token_number=token_number, restaurant=restaurant)
+        if token_number != None:            
+            try:
+                token = Token.objects.get(token_number=token_number, restaurant=restaurant)
+            except ObjectDoesNotExist as e:
+                token = None
+                raise APIException(f"Token number '{token_number}' not exists for the restaurant")
 
-        try:
-            token = Token.objects.get(token_number=token_number)
-        except ObjectDoesNotExist as e:
+            added_rating = AddedRating.objects.filter(token_number=token)
+            added_dish_rating = AddedDishRating.objects.filter(token_number=token)
+            if((added_rating.exists() == True) or (added_dish_rating.exists() == True)):
+                raise APIException(f"Token number '{token_number}' is already used")
+
+        else:
             token = None
-            raise APIException(f"Token number '{token_number}' not exists")
-
-        try:
-            token = Token.objects.get(token_number=token_number, restaurant=restaurant)
-        except ObjectDoesNotExist as e:
-            token = None
-            raise APIException(f"Token number '{token_number}' not exists for the restaurant")
-
         # validate rating categories
 
         if(token == None):
@@ -112,6 +120,7 @@ class RatingService:
             verified = VerifiedStatus.Verified.value
 
         rating = Rating(
+          restaurant = restaurant,  
           dish_rating = dish_rating,
           price_rating = price_rating,
           service_rating = service_rating,
@@ -121,23 +130,42 @@ class RatingService:
         try: 
             rating.save()
         except IntegrityError as e:
-            raise APIException(e)  
+            raise APIException(e)   
 
+        system_service = SystemService()
         if(dish_id != None):
             added_dish_rating = AddedDishRating(
             rating = rating,
-            restaurant = restaurant,
             dish = dish,
             user = user,
             token_number = token)
+            try: 
+                # pass
+                added_dish_rating.save()
+                if(verified == VerifiedStatus.Verified.value):
+                    system_service.add_contribution_points(ContributionTypes.AddVerifiedDishRating.value, user)
+                else:
+                    system_service.add_contribution_points(ContributionTypes.AddUnverifiedDishRating.value, user)
+            except IntegrityError as e:
+                raise APIException(e)
+        else:
+            added_rating = AddedRating(
+                rating = rating,
+                user = user,
+                token_number = token
+                )
 
-        try: 
-            # pass
-            added_dish_rating.save()
-        except IntegrityError as e:
-            raise APIException(e)   
+            try: 
+                added_rating.save()
+                if(verified == VerifiedStatus.Verified.value):
+                    system_service.add_contribution_points(ContributionTypes.AddVerifiedRestaurantRating.value, user)
+                else:
+                    system_service.add_contribution_points(ContributionTypes.AddUnverifiedRestaurantRating.value, user)
+            except IntegrityError as e:
+                raise APIException(e)    
 
         # add contribution points to the user
+        
 
         # this should be change by using response model
         resp={
@@ -155,7 +183,7 @@ class RatingService:
             }
         }
 
-        return resp 
+        return resp
 
     def delete_rating(self, data):
         pass;
