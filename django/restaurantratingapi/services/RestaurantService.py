@@ -191,8 +191,55 @@ class RestaurantService:
     def deregister_restaurant():
         pass    
         
-    def get_restaurant():
-        pass
+    def get_restaurant(self, data):
+
+        rest = Restaurant.objects.get(restaurant_id=data)
+        rating_svc = RatingService
+        rating_resp = rating_svc.get_ratings_for_restaurant(self, data)
+        dishes = Dish.objects.raw("""
+            SELECT restaurant_id, dish.dish_id as dish_id,
+            dish_name, restaurant_dish.status as status
+            FROM dish 
+            INNER JOIN restaurant_dish
+            ON dish.dish_id=restaurant_dish.dish_id
+            WHERE restaurant_id=%s
+            """, [data])
+
+        dish_list = []
+        for item in dishes:
+            dish = {
+            "dish_id":item.dish_id,
+            "dish_name":item.dish_name,
+            "added_status": item.status
+            }
+            dish_list.append(dish)
+
+        resp={
+            "success": True,
+            "code": 200,
+            "message": "success GetRestaurant",
+            "data": {
+                "restaurant_id": rest.restaurant_id,
+                "restaurant_name": rest.name,
+                "dishes": dish_list,
+                "address": rest.address,
+                "logitude": rest.longitude,
+                "latitude": rest.latitude,        
+                "phone_number": rest.phone_number,
+                "added_by": rest.created_by.username,
+                "claimed_by": rest.claimed_by.username if rest.claimed_by != None else None,
+                "code": rest.code,
+                "claimed_status": ClaimStatus(rest.claimed).name,
+                "created_on": rest.created_on,
+                "total_no_of_ratings": rating_resp['data']['total_no_of_ratings'],
+                "dish_rating": rating_resp['data']['dish_rating'],
+                "price_rating": rating_resp['data']['price_rating'],
+                "service_rating": rating_resp['data']['service_rating'],
+                "overall_rating": rating_resp['data']['overall_rating']
+            }
+        }
+
+        return resp;
 
     def get_restaurant_list():
         pass
