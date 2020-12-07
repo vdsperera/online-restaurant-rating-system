@@ -225,5 +225,96 @@ class RatingService:
 
         return list
 
+    ## should check with activity diagram
+    # GET api/ratings/list?restid=23
+    # this gets list of ratings for the restaurant
+    # this also gives for the restaurant
+    # def get rating list_for_the_restaurant()
+    def get_ratings_for_restaurant(self, rest_id):
+
+        ratings = Rating.objects.raw("""
+            SELECT rating.rating_id, restaurant_id, dish_id, dish_rating,
+            price_rating, service_rating, verified,
+            added_dish_rating.user_id as dish_user_id,
+            added_rating.user_id as restaurant_user_id
+            FROM rating
+            LEFT JOIN added_dish_rating
+            ON added_dish_rating.rating_id=rating.rating_id
+            LEFT JOIN added_rating
+            ON added_rating.rating_id = rating.rating_id 
+            WHERE restaurant_id=%s""",
+            [rest_id])
+
+        list = []
+
+        total_dish_rating = 0
+        total_price_rating = 0
+        total_service_rating = 0
+        total_no_of_ratings = 0
+        overall_rating = 0
+
+        avg_dish_rating = 0
+        avg_price_rating = 0
+        avg_service_rating = 0
+        overall_rating = 0
+
+        if not ratings:
+            resp = {
+                "success": True,
+                "code": 200,
+                "message": "success GetRating",
+                "data": {
+                    "restaurant_id": rest_id,
+                    "total_no_of_ratings": total_no_of_ratings,
+                    "overall_rating": overall_rating,
+                    "dish_rating": avg_dish_rating,
+                    "price_rating": avg_price_rating,
+                    "service_rating": avg_service_rating,
+                    "ratings": list
+                }
+            }
+            return resp
+
+
+        for item in ratings:
+            total_no_of_ratings = total_no_of_ratings + 1
+            total_dish_rating = total_dish_rating + item.dish_rating
+            total_price_rating = total_price_rating + item.price_rating
+            total_service_rating = total_service_rating + item.service_rating
+
+            rating_model = {
+                "rating_id": item.rating_id,
+                "dish_id": item.dish_id,
+                "overall_rating": (item.dish_rating + item.price_rating + item.service_rating)/3,
+                "dish_rating": item.dish_rating,
+                "price_rating": item.price_rating,
+                "service_rating": item.service_rating,
+                "added_by": item.restaurant_user_id if item.restaurant_user_id != None else item.dish_user_id,
+                "verified": item.verified
+            }
+            list.append(rating_model)
+
+        avg_dish_rating = total_dish_rating/total_no_of_ratings
+        avg_price_rating = total_price_rating/total_no_of_ratings
+        avg_service_rating = total_service_rating/total_no_of_ratings
+        overall_rating = (avg_dish_rating + avg_price_rating + avg_service_rating)/3
+
+        resp = {
+            "success": True,
+            "code": 200,
+            "message": "success GetRating",
+            "data": {
+                "restaurant_id": rest_id,
+                "total_no_of_ratings": total_no_of_ratings,
+                "overall_rating": overall_rating,
+                "dish_rating": avg_dish_rating,
+                "price_rating": avg_price_rating,
+                "service_rating": avg_service_rating,
+                "ratings": list
+            }
+        }
+
+        return resp
+
     def delete_rating(self, data):
         pass;
