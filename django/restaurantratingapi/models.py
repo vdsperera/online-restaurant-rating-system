@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 # from django.contrib.gis.geos import Point
 from django.core.validators import RegexValidator
-from phonenumber_field.modelfields import PhoneNumberField
 
 class UserRole(models.Model):
     role_id = models.AutoField(primary_key=True)
