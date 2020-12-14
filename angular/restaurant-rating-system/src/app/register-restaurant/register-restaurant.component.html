@@ -1,4 +1,138 @@
+<style>
+
+
+/*.clsmain {
+  background-color: lightblue;
+}*/
+
+/*mat-label {
+  color: gray;	
+}
+
+mat-option-value {
+  color: gray;	
+}
+
+mat-select-value {
+  color: gray;	
+}*/
+
+/*#hotel_map {
+    height: 400px;
+    width: 100%;
+  }*/
+
+</style>
+
+<!-- <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
+  <ng-container *ngFor="let restaurant of restaurants$ | async">
+	  <mat-card-title>{{ restaurant.id }}</mat-card-title>
+  </ng-container>
+</div> -->
 <body>
+<!-- <div class="clsmain">
+	<h1> Register Restaurant </h1>
+	<form class="create-account-form" (ngSubmit)="onSubmit(f)" #f="ngForm">
+		<mat-form-field appearance="fill">
+		  <mat-label>What is your role</mat-label>
+		  <mat-select name="user_role" [(value)]="selected" #user_role ngModel >
+		    <mat-option value="Customer">Customer</mat-option>		  	
+		    <mat-option value="Restaurant Owner">Restaurant Owner</mat-option>
+		  </mat-select>
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label class="clslbl">Business name</mat-label>
+    		<input name="rest_name" matInput #rest_name ngModel />			
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>Phone number</mat-label>
+    		<input name="rest_pnumber" matInput type="text" #rest_pnumber ngModel/>			
+		</mat-form-field>	
+		<br>	
+		<mat-form-field appearance='fill'>
+    		<mat-label>Website</mat-label>
+    		<input name="rest_website" matInput type="text" #rest_website ngModel/>			
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>Email</mat-label>
+    		<input name="email" matInput type="text" #rest_email ngModel/>			
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>City/Town, Province</mat-label>
+    		<input name="city" matInput type="text" type="text" #rest_city ngModel/>			
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>Address</mat-label>
+    		<input  name="rest_address" matInput type="text" #rest_address ngModel />			
+		</mat-form-field>		
+		<br>
+		<div class="row">
+			<div id="hotel_map" class="hotel_map"></div>
+		</div>		
+		<br>
+			<button mat-raised-button type="submit">Submit</button>		
+		<br>
+	</form> -->
+
+<!-- Replaced with Reactive form -->
+<!-- <div class="clsmain">	
+	<form [formGroup]="rest_register_form" class="create-account-form" (ngSubmit)="onSubmit(f)" #f="ngForm">
+		<mat-form-field appearance="fill">
+		  <mat-label>What is your role</mat-label>
+		  <mat-select [formControl]='user_role' name="user_role" [(value)]="selected" ngModel >
+		    <mat-option value="Customer">Customer</mat-option>		  	
+		    <mat-option value="Restaurant Owner">Restaurant Owner</mat-option>
+		  </mat-select>
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label class="clslbl">Business name</mat-label>
+    		<input [formControl]='rest_name' name="rest_name" matInput ngModel />			
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>Phone number</mat-label>
+    		<input [formControl]='rest_pnumber' name="rest_pnumber" matInput type="text" ngModel/>			
+		</mat-form-field>	
+		<br>	
+		<mat-form-field appearance='fill'>
+    		<mat-label>Website</mat-label>
+    		<input [formControl]='rest_website' name="rest_website" matInput type="text" ngModel/>			
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>Email</mat-label>
+    		<input [formControl]='rest_email' name="email" matInput type="text" ngModel/>			
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>Street</mat-label>
+    		<input [formControl]='rest_street' name="street" matInput type="text" type="text" ngModel/>			
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>City</mat-label>
+    		<input [formControl]='rest_city' name="city" matInput type="text" type="text" ngModel/>			
+		</mat-form-field>
+		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>Zip Code</mat-label>
+    		<input [formControl]='rest_zip_code'  name="rest_zip_code" matInput type="text" ngModel />			
+		</mat-form-field>		
+		<br>
+		<div class="row">
+			<div id="hotel_map" class="hotel_map"></div>
+		</div>		
+		<br>
+			<button mat-raised-button type="submit">Submit</button>		
+	</form> -->
+
+<!-- added form group -->
 <div class="clsmain">	
 	<h1> Register Restaurant </h1>
 	<form [formGroup]="rest_register_form" class="create-account-form" (ngSubmit)="onSubmit(f)" #f="ngForm">
@@ -30,6 +164,10 @@
     		<input formControlName='rest_email' name="email" matInput type="text" ngModel/>			
 		</mat-form-field>
 		<br>
+		<mat-form-field appearance='fill'>
+    		<mat-label>Street Address</mat-label>
+    		<input formControlName='rest_street' name="street" matInput type="text" type="text" ngModel/>			
+		</mat-form-field>
 		<br>
 		<mat-form-field appearance='fill'>
     		<mat-label>City</mat-label>
@@ -41,9 +179,9 @@
     		<input formControlName='rest_zip_code'  name="rest_zip_code" matInput type="text" ngModel />			
 		</mat-form-field>		
 		<br>
-<!-- 		<div class="row">
+		<div class="row">
 			<div id="hotel_map" class="hotel_map"></div>
-		</div>	 -->
+		</div>	
 		<br>
 		<label for="file">Choose File</label>	
 		<input type="file" name="file" (change)="handleFileInput($event.target.files)"/>			
