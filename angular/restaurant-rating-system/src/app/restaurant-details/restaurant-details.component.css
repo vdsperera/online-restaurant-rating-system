@@ -29,3 +29,7 @@ button{
   align-items: center;
   justify-content: center;
 }
+
+.checked {
+  color: orange;
+}
