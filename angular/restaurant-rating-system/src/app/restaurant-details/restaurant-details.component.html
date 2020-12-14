@@ -1,3 +1,4 @@
+
 <div class='rating'>
 <!-- 	<mat-form-field> -->
 <!-- 	<mat-select class='mat-select-dish' name="user_role" ngModel placeholder='Dish'>
@@ -6,14 +7,56 @@
 		<mat-option class='mat-option-dish' value="Chopsey Rice">Chopsey Rice</mat-option>
 	</mat-select>
 	<br> -->
-<!-- 	<select name="cars" id="cars">
-	  <option value="Kottu">Dish 01</option>
-	  <option value="Fried Rice">Dish 02</option>
-	  <option value="Chopsey Rice">Dish 03</option>
-	</select> -->	
+	<select name="dishes" id="dishesdrop">
+		<option value="null">none</option>
+		<ng-container *ngFor="let item of restaurant_dishes">
+			<option value={{item.dish_id}}>{{item.dish_name}}</option>
+		</ng-container>  
+	</select>	
 <!-- 	</mat-form-field> -->
 	<br>
 	<app-star-rating (rating_model_event) = "rating_event_hander($event)"></app-star-rating>
 	<br>
-	<button mat-raised-button color="primary">Submit</button>	
+	<label for="Token">Token</label>
+	<input type="text" name="token_number" id="token_number">
+	<button mat-raised-button color="primary" (click)=submit()>Submit</button>
+	<div>
+		<ul style="list-style-type:none;">
+<!--		<li>
+		Dish 01
+		<span class="fa fa-star checked"></span>			
+		</li>
+		<li>
+		Dish 02
+		<span class="fa fa-star checked"></span>
+		<span class="fa fa-star checked"></span>
+		<span class="fa fa-star checked"></span>			
+		</li>
+		<li>
+		Dish 03
+		<span class="fa fa-star checked"></span>
+		<span class="fa fa-star checked"></span>			
+		</li>
+		<li>
+		Dish 04
+		<span class="fa fa-star checked"></span>			
+		</li>
+-->
+		<ng-container *ngFor="let item of dish_rating_list">
+			{{set_star_rating(item.overall_rating)}}
+			<li>{{item.dish_name}}
+			<span *ngFor="let item of checked_star_array()"><span class="fa fa-star checked"></span></span>
+			<span *ngFor="let item of star_array()"><span class="fa fa-star"></span></span>
+			{{checked_star}}
+			</li>
+		</ng-container>
+		</ul>
+	</div>
+
+<jw-modal id="custom-modal-1">
+    <h1>A Custom Modal!</h1>
+    <p>Home page text: <input type="text" [(ngModel)]="body_string" /></p>
+    <button (click)="closeModal('custom-modal-1');">Close</button>
+</jw-modal>
+
 </div>
