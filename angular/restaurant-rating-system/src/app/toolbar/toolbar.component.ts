@@ -7,12 +7,7 @@ import { MenuItem } from '../menu-item';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  
   menuItems: MenuItem[] = [
     {
       label: 'Blog',
@@ -63,8 +58,13 @@ export class ToolbarComponent implements OnInit {
       route: ''
     },
 
+
+  
   ];
 
+  constructor() { }
 
+  ngOnInit(): void {
+  }
 
 }
