@@ -1,8 +1,8 @@
 export class Rating
 {
-  private dish_rating: number;
-  private price_rating: number;
-  private service_rating: number; 
+  private dish_rating: number = null;
+  private price_rating: number = null;
+  private service_rating: number = null; 
 
   // constructor(name: string, address: string, phone_number: string, longitude: string, latitude: string)
   // {
@@ -27,4 +27,14 @@ export class Rating
   {
     this.service_rating = service_rating;
   }  
+
+  public get_ratings()
+  {
+    let model = {
+      "dish_rating":this.dish_rating,
+      "price_rating": this.price_rating,
+      "service_rating": this.service_rating
+    }
+    return model
+  } 
 }
