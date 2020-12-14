@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
 <!-- <app-layout> -->
   <mat-sidenav-container>
@@ -151,26 +151,57 @@
     </app-card>
   </ng-container>
 </div> -->
+<button mat-button (click)="openDialogWithRef(firstDialog)">Open dialog with reference</button>
+<button mat-button (click)="openOtherDialog()">Open dialog in code</button>
+
+<ng-template #firstDialog>
+  <h2 matDialogTitle>Hello, world!</h2>
+  <p matDialogContent><em>Content for this dialog goes here...</em></p>
+  <mat-dialog-actions align="end">
+    <button mat-button matDialogClose>Dismiss</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<mat-form-field class="example-form-field">
+  <mat-label>Clearable input</mat-label>
+  <input matInput type="search" [(ngModel)]="value">
+  <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field><br>
 
 
+  <!-- <button (click)= get_restaurants_dish() mat-button>dish rating list for 2<i class="fa fa-heart"></i></button> -->
+  <button (click)= get_restaurants(firstDialog) mat-button>get restaurants<i class="fa fa-heart"></i></button>
+  <select name="dishes" id="dishesdrop">
+    <option value="null">none</option>
+    <ng-container *ngFor="let item of system_dishes">
+      <option value={{item.dish_id}}>{{item.dish_name}}</option>
+    </ng-container>  
+  </select> 
+<button (click)= order_list_by_overall_rating_ase() mat-button>ASC<i class="fa fa-heart"></i></button>
+<button (click)= order_list_by_overall_rating_des() mat-button>DES<i class="fa fa-heart"></i></button>
+<button (click)= find_now() mat-button>Find<i class="fa fa-heart"></i></button>
+<input [(ngModel)]="searchText" placeholder="search text goes here"><br>
 
 <div name='div_main' fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
-  <ng-container *ngFor="let restaurant of restaurants$ | async">
+  <ng-container *ngFor="let restaurant of restaurants | appFilter : searchText">
     <app-card fxFlex="0 1 calc(20% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
       <mat-card>
         <mat-card-header>
           <div mat-card-avatar class="example-header-image"></div>
-          <mat-card-title>{{ restaurant.name }}</mat-card-title>
+          <mat-card-title>{{ restaurant.restaurant_name }}</mat-card-title>
           <mat-card-subtitle>{{ restaurant.address }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <img mat-card-image src="https://cdn.pixabay.com/photo/2019/09/23/16/39/square-4499056_960_720.jpg" alt="Photo of a Shiba Inu">
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span> 105 Reviews</span>
+            <img mat-card-image src="/assets/images/square-4499056_960_720.jpg" alt="Photo of a Shiba Inu">
+            {{questioner(restaurant.overall_rating)}}
+            <span *ngFor="let item of arrayOne(3); let i = index;"><span class="fa fa-star checked"></span> </span>
+            <span *ngFor="let item of arrayTwo(3); let i = index;"><span class="fa fa-star"></span> </span>
+            <span> {{restaurant.total_no_of_ratings}} </span><br>
+            <span> {{restaurant.overall_rating}} </span><br>
+            <span> restaurant id {{restaurant.restaurant_id}} </span><br>
+
         </mat-card-content>
         <mat-card-actions>
           <button mat-button><i class="fa fa-heart"></i></button>
